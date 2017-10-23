@@ -1,0 +1,37 @@
+﻿<div class='main-nav'>
+    <div class='navbar navbar-inverse'>
+        <div class='navbar-header'>
+            <button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse'>
+                <span class='sr-only'>Toggle navigation</span>
+                <span class='icon-bar'></span>
+                <span class='icon-bar'></span>
+                <span class='icon-bar'></span>
+            </button>
+            <a class='navbar-brand' [routerLink]="['/home']">Clients</a>
+        </div>
+        <div class='clearfix'></div>
+        <div *ngIf="selectedCity" class='navbar-collapse collapse'>
+            <!--<input type="button" value="Filter" class="accordeon"/>-->
+            <div class="filter-panel">
+                <input type="text" [(ngModel)]="filterName" placeholder="Fullname" class="form-control" />
+                <select [(ngModel)]="selectedCity" class="form-control">
+                    <option [ngValue]="city" *ngFor="let city of cities">{{city.name}}</option>
+                </select>
+                <div>
+                    <span class="note-for">Reset filter:</span>
+                    <button (click)="resetFilter()" type="button" class="btn btn-primary btn-filter">
+                        <span class='glyphicon glyphicon-refresh'></span>
+                    </button>
+                </div>
+            </div>
+            <hr />
+            <ul class='nav navbar-nav'>
+                <li *ngFor="let client of menuClients | clientFilter:filterName:selectedCity.id" [routerLinkActive]="['link-active']">
+                    <a [routerLink]="['/client-tasks', client.id]">
+                        <span class='glyphicon glyphicon-user'></span> {{client.fullName}}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

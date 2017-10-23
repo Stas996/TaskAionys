@@ -1,0 +1,66 @@
+﻿<h1 *ngIf="currentClient">Tasks for {{currentClient.fullName}}</h1>
+
+<p *ngIf="!tasks"><em>Loading...</em></p>
+
+<div *ngIf="tasks">
+    <table class='table'>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Client address</th>
+                <th>Start time</th>
+                <th>End time</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let task of tasks">
+                <td>{{ task.name }}</td>
+                <td>{{ task.description }}</td>
+                <td>{{ task.client.address }}</td>
+                <td>{{ task.startTime | date:'MMM dd, y hh:mm a' }}</td>
+                <td>{{ task.endTime | date:'MMM dd, y hh:mm a' }}</td>
+                <td><input class="btn btn-warning" type="button" value="Edit" (click)="editClick(task.id)" /></td>
+                <td><input class="btn btn-danger" type="button" value="Delete" (click)="deleteClick(task.id)" /></td>
+            </tr>
+        </tbody>
+    </table>
+    <input type="button" class="btn btn-primary" (click)="addClick()" value="Add" />
+
+    <modal #modal>
+        <form novalidate (ngSubmit)="onSubmit()" [formGroup]="taskForm">
+            <modal-header [show-close]="true">
+                <h4 class="modal-title">{{modalTitle}}</h4>
+            </modal-header>
+            <modal-body>
+
+                <div class="form-group">
+                    <input type="hidden" formControlName="id" />
+                    <input type="hidden" formControlName="clientId" />
+                    <div>
+                        <span>Name</span>
+                        <input type="text" class="form-control" placeholder="Name" formControlName="name">
+                    </div>
+                    <div>
+                        <span>Description</span>
+                        <textarea class="form-control" placeholder="Description" formControlName="description"></textarea>
+                    </div>
+                    <div class="form-multiblock">
+                        <span>From </span>
+                        <p-calendar formControlName="startTime" showTime="true" [minDate]="minDate" inputStyleClass="form-control"></p-calendar>
+                        <span> To </span>
+                        <p-calendar formControlName="endTime" showTime="true" [minDate]="minDate" inputStyleClass="form-control"></p-calendar>
+                    </div>
+                </div>
+            </modal-body>
+            <modal-footer>
+                <div>
+                    <a class="btn btn-default" (click)="modal.dismiss()">Cancel</a>
+                    <button type="submit" [disabled]="taskForm.invalid" class="btn btn-primary">{{modalBtnTitle}}</button>
+                </div>
+            </modal-footer>
+        </form>
+    </modal>
+</div>

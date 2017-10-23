@@ -1,0 +1,68 @@
+﻿<h1>Clients</h1>
+
+<p *ngIf="!clients"><em>Loading...</em></p>
+
+<div *ngIf="clients">
+    <table class='table' *ngIf="clients">
+        <thead>
+            <tr>
+                <th>Fullname</th>
+                <th>Address</th>
+                <th>Phone numbers</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let client of clients">
+                <td>{{ client.fullName }}</td>
+                <td>{{ client.address }}</td>
+                <td>{{ client.phoneNumbersCSV }}</td>
+                <td><input class="btn btn-warning" type="button" value="Edit" (click)="editClick(client.id)" /></td>
+                <td><input class="btn btn-danger" type="button" value="Delete" (click)="deleteClick(client.id)" /></td>
+            </tr>
+        </tbody>
+    </table>
+    <input type="button" class="btn btn-primary" (click)="addClick()" value="Add" />
+
+    <modal #modal>
+        <form novalidate (ngSubmit)="onSubmit()" [formGroup]="clientForm">
+            <modal-header [show-close]="true">
+                <h4 class="modal-title">{{modalTitle}}</h4>
+            </modal-header>
+            <modal-body>
+                <div class="form-group">
+                    <input type="hidden" formControlName="id" />
+                    <div>
+                        <span>First name</span>
+                        <input type="text" class="form-control" placeholder="First Name" formControlName="firstName">
+                    </div>
+                    <div>
+                        <span>Last name</span>
+                        <input type="text" class="form-control" placeholder="Last Name" formControlName="lastName">
+                    </div>
+                    <div>
+                        <span>City</span>
+                        <select class="form-control" formControlName="cityId">
+                            <option [value]="city.id" *ngFor="let city of cities">{{city.name}}</option>
+                        </select>
+                    </div>
+                    <div>
+                        <span>Address</span>
+                        <input type="text" class="form-control" placeholder="Address" formControlName="address">
+                    </div>
+                    <div>
+                        <span>Phone numbers</span>
+                        <input type="text" class="form-control" placeholder="Phone numbers" formControlName="phoneNumbersCSV">
+                    </div>
+                </div>
+            </modal-body>
+            <modal-footer>
+                <div>
+                    <a class="btn btn-default" (click)="modal.dismiss()">Cancel</a>
+                    <button type="submit" [disabled]="clientForm.invalid" class="btn btn-primary">{{modalBtnTitle}}</button>
+                </div>
+            </modal-footer>
+        </form>
+    </modal>
+</div>
